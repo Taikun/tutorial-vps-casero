@@ -1,0 +1,29 @@
+#Estructura de carpetas
+/opt/docker/
+├── nginx-proxy-manager
+├── portainer
+├── home-assistant
+├── nextcloud
+├── vaultwarden
+├── bitwarden
+├── adguard-home
+├── immich
+
+# Dentro de cada APP
+/opt/docker/nginx-proxy-manager/
+├── docker-compose.yml
+├── .env                    # Si te gusta separar variables
+├── data/                    # Volúmenes o datos de la app
+├── logs/
+
+# Ejemplo
+/opt/docker/
+├── nginx-proxy-manager/
+│   ├── docker-compose.yml
+│   ├── data/
+│   ├── logs/
+│
+├── home-assistant/
+│   ├── docker-compose.yml
+│   ├── config/
+│   ├── logs/
