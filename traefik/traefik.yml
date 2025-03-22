@@ -1,0 +1,23 @@
+entryPoints:
+  web:
+    address: ":80"
+  websecure:
+    address: ":443"
+  traefik:                # este nombre es importante
+    address: ":9000"      # expone el dashboard por este puerto
+
+api:
+  dashboard: true
+  insecure: true          # visible directamente por el puerto 9000 (solo en red local)
+
+providers:
+  docker:
+    exposedByDefault: false
+
+certificatesResolvers:
+  letsencrypt:
+    acme:
+      email: tucorreo@tudominio.com
+      storage: acme.json
+      httpChallenge:
+        entryPoint: web
