@@ -13,15 +13,20 @@ fi
 LAST_RUN=$(cat "$LAST_RUN_FILE")
 NOW=$(date +"%Y-%m-%dT%H:%M:%S")
 
+# Calculate duration since last run in minutes (minimum 5 minutes)
+DURATION="5m"
+
 # Buscar alertas desde la última ejecución
-ALERTS=$($CSCLI alerts list --since "$LAST_RUN" -o json)
+ALERTS=$($CSCLI alerts list --since "${DURATION}" -o json)
 
 # Actualizamos el timestamp
 echo "$NOW" > "$LAST_RUN_FILE"
 
-# Si hay alertas, las mandamos
-if [ "$ALERTS" != "[]" ]; then
-  echo "$ALERTS" | jq -r '.[] | "🛡️ CrowdSec ha bloqueado una IP:\n🔹 IP: \(.decisions[0].value)\n🔹 Razón: \(.decisions[0].scenario)\n🔹 Desde: \(.start_at)\n🔹 Hasta: \(.decisions[0].until)"' | while read -r line; do
-    $SEND_SCRIPT "$line"
+# Check if we have valid alerts (not null and not empty array)
+if [ "$ALERTS" != "null" ] && [ -n "$ALERTS" ] && [ "$ALERTS" != "[]" ]; then
+  echo "$ALERTS" | jq -r 'if type == "array" then .[] | select(.decisions != null and .decisions[0] != null) | "\U0001F6E1️ CrowdSec ha bloqueado una IP:\n\U0001F539 IP: \(.decisions[0].value)\n\U0001F539 Razón: \(.decisions[0].scenario)\n\U0001F539 Desde: \(.start_at)\n\U0001F539 Hasta: \(.decisions[0].until)" else empty end' | while read -r line; do
+    if [ -n "$line" ]; then
+      $SEND_SCRIPT "$line"
+    fi
   done
 fi
