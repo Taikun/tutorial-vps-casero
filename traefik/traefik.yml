@@ -14,10 +14,28 @@ providers:
   docker:
     exposedByDefault: false
 
+  file:
+    directory: /dynamic  # Aquí buscará toda tu config dinámica
+    watch: true
+
 certificatesResolvers:
   letsencrypt:
     acme:
-      email: tucorreo@tudominio.com
+      email: your@email.com
       storage: acme.json
-      httpChallenge:
-        entryPoint: web
+      dnsChallenge:
+        provider: cloudflare
+        delayBeforeCheck: 0
+
+accessLog:
+  filePath: /var/log/traefik/access.log
+  bufferingSize: 100
+
+experimental:
+  plugins:
+    crowdsec-bouncer-traefik-plugin:
+      moduleName: "github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin"
+      version: "v1.4.2"
+    fail2ban:
+      moduleName: "github.com/tomMoulard/fail2ban"
+      version: "v0.8.3"

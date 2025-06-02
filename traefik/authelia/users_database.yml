@@ -1,0 +1,6 @@
+users:
+  admin:
+    password: "youradminmashashed"  # generado con: docker run authelia/authelia authelia hash-password
+    displayname: "Administrador"
+    groups:
+      - admins

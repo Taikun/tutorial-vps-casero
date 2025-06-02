@@ -1,4 +1,4 @@
-ervices:
+services:
   linktree:
     image: nginx:alpine
     container_name: linktree
@@ -7,9 +7,10 @@ ervices:
       - ./html:/usr/share/nginx/html:ro
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.linktree.rule=Host(`appone.tech-preppers.com`)"
+      - "traefik.http.routers.linktree.rule=Host(`appone.yourdomain.com`)"
       - "traefik.http.routers.linktree.entrypoints=websecure"
       - "traefik.http.routers.linktree.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.linktree.middlewares=authelia-auth@file"
     networks:
       - web
 

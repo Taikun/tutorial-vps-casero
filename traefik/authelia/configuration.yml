@@ -1,0 +1,41 @@
+theme: dark
+
+identity_validation:
+  reset_password:
+    jwt_secret: "una_cadena_larga_y_secreta"
+
+
+server:
+  address: tcp://0.0.0.0:9091/
+
+log:
+  level: info
+
+authentication_backend:
+  file:
+    path: /config/users_database.yml
+
+access_control:
+  default_policy: deny
+  rules:
+    - domain: "*.tech-preppers.com"
+      policy: one_factor
+
+session:
+  name: authelia_session
+  secret: "otra_cadena_supersecreta"
+  expiration: 3600
+  inactivity: 300
+  cookies:
+    - domain: yourdomain.com
+      authelia_url: https://auth.yourdomain.com
+      default_redirection_url: https://appone.youtdomainb.com
+
+storage:
+  local:
+    path: /config/db.sqlite3
+  encryption_key: "una_clave_de_64_bytes_012345678901234567890123456789012345678901234567890123456789"
+
+notifier:
+  filesystem:
+    filename: /config/notification.txt
